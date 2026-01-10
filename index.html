@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honey Quality Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .landing-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #d4a574 0%, #c89548 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #f4e4c1;
+            font-size: 24px;
+            animation: sparkleFloat 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(0.5); }
+            50% { opacity: 1; transform: translateY(-50px) scale(1); }
+        }
+
+        .icon-container {
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        .honey-icon {
+            font-size: 80px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero-content .highlight {
+            color: #f4d03f;
+        }
+
+        .hero-content .tagline {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-style: italic;
+            opacity: 0.95;
+        }
+
+        .hero-content .description {
+            font-size: 18px;
+            margin-bottom: 40px;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: white;
+            color: #d4a574;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .features {
+            display: flex;
+            gap: 60px;
+            margin-top: 60px;
+            z-index: 10;
+        }
+
+        .feature {
+            text-align: center;
+            color: white;
+        }
+
+        .feature-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #f4d03f;
+            margin-bottom: 5px;
+        }
+
+        .feature-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .test-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: none;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .test-container {
+            max-width: 600px;
+            margin: 80px auto 0;
+            background: rgba(255,255,255,0.95);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .test-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd89b 0%, #ff9a56 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 40px;
+        }
+
+        .test-container h2 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .test-container .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .range-info {
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .result-page {
+            min-height: 100vh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-page.pure {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .result-page.adulterated {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: confettiFall 3s linear;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .result-content {
+            text-align: center;
+            color: white;
+            z-index: 10;
+        }
+
+        .result-icon-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 30px;
+            border: 5px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .result-icon {
+            font-size: 80px;
+        }
+
+        .result-content h1 {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-content .message {
+            font-size: 22px;
+            margin-bottom: 15px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: slideInUp 0.7s ease-out;
+        }
+
+        .result-content .details {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .sparkle-icon {
+            display: inline-block;
+            margin: 0 10px;
+            animation: sparkleRotate 2s infinite;
+        }
+
+        @keyframes sparkleRotate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+        }
+
+        .retry-button {
+            background: white;
+            color: #11998e;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.9s ease-out;
+        }
+
+        .result-page.adulterated .retry-button {
+            color: #eb3349;
+        }
+
+        .retry-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .show {
+            display: flex !important;
+        }
+
+        .hide {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div class="landing-page" id="landingPage">
+        <div class="icon-container">
+            <div class="honey-icon">✨</div>
+        </div>
+        <div class="hero-content">
+            <h1>Pure Honey, <span class="highlight">Pure Health</span></h1>
+            <p class="tagline">"Nature's golden nectar deserves to be pure"</p>
+            <p class="description">
+                Discover the truth about your honey's quality. Check authenticity with precision and ensure every spoonful is as nature intended.
+            </p>
+            <button class="cta-button" id="startButton">Check Your Honey Quality</button>
+        </div>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-title">100%</div>
+                <div class="feature-subtitle">Accurate</div>
+            </div>
+            <div class="feature">
+                <div class="feature-title">Fast</div>
+                <div class="feature-subtitle">Results</div>
+            </div>
+            <div class="feature">
+                <div class="feature-title">Easy</div>
+                <div class="feature-subtitle">To Use</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Page -->
+    <div class="test-page" id="testPage">
+        <button class="back-button" id="backButton">← Back to Home</button>
+        <div class="test-container">
+            <div class="test-icon">🍯</div>
+            <h2>Test Your Honey</h2>
+            <p class="subtitle">Enter the parameters to check honey authenticity</p>
+            
+            <div>
+                <div class="form-group">
+                    <label>pH Level</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🍯</span>
+                        <input type="number" step="0.1" id="pH" placeholder="e.g., 4.2">
+                    </div>
+                    <div class="range-info">Normal range: 3.5 - 5.5</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Water Content (%)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">💧</span>
+                        <input type="number" step="0.1" id="waterContent" placeholder="e.g., 17.5">
+                    </div>
+                    <div class="range-info">Normal range: 15 - 20%</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Fructose (%)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🍊</span>
+                        <input type="number" step="0.1" id="fructose" placeholder="e.g., 38.5">
+                    </div>
+                    <div class="range-info">Normal range: 30 - 45%</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Glucose (%)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🍯</span>
+                        <input type="number" step="0.1" id="glucose" placeholder="e.g., 32.0">
+                    </div>
+                    <div class="range-info">Normal range: 25 - 35%</div>
+                </div>
+
+                <button class="submit-button" id="analyzeButton">Analyze Honey Quality</button>
+                <div class="loading" id="loading">
+                    <p>🔄 Analyzing your honey sample...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Page -->
+    <div class="result-page" id="resultPage">
+        <div class="result-content" id="resultContent"></div>
+    </div>
+
+    <script>
+        const landingPage = document.getElementById('landingPage');
+        const testPage = document.getElementById('testPage');
+        const resultPage = document.getElementById('resultPage');
+        const startButton = document.getElementById('startButton');
+        const backButton = document.getElementById('backButton');
+        const analyzeButton = document.getElementById('analyzeButton');
+        const loading = document.getElementById('loading');
+
+        function createSparkles() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.textContent = '✨';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animationDelay = Math.random() * 3 + 's';
+                    landingPage.appendChild(sparkle);
+                }, i * 200);
+            }
+        }
+
+        createSparkles();
+
+        startButton.addEventListener('click', function() {
+            landingPage.classList.add('hide');
+            testPage.classList.add('show');
+            resultPage.classList.remove('show');
+        });
+
+        backButton.addEventListener('click', function() {
+            landingPage.classList.remove('hide');
+            testPage.classList.remove('show');
+            resultPage.classList.remove('show');
+        });
+
+        // MAIN PREDICTION FUNCTION - Connects to Flask Backend
+        analyzeButton.addEventListener('click', async function() {
+            const pH = parseFloat(document.getElementById('pH').value);
+            const waterContent = parseFloat(document.getElementById('waterContent').value);
+            const fructose = parseFloat(document.getElementById('fructose').value);
+            const glucose = parseFloat(document.getElementById('glucose').value);
+
+            if (isNaN(pH) || isNaN(waterContent) || isNaN(fructose) || isNaN(glucose)) {
+                alert('Please fill in all fields with valid numbers!');
+                return;
+            }
+
+            // Show loading
+            analyzeButton.disabled = true;
+            loading.classList.add('show');
+
+            try {
+                // Send data to Flask backend
+                const response = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pH: pH,
+                        WC: waterContent,
+                        Fructose: fructose,
+                        Glucose: glucose
+                    })
+                });
+
+                const data = await response.json();
+
+                // Hide loading
+                loading.classList.remove('show');
+                analyzeButton.disabled = false;
+
+                // Check if prediction is pure (1) or adulterated (0)
+                const isPure = data.prediction === 1 || data.prediction === 'Pure';
+
+                showResult(isPure);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error connecting to the server. Please try again.');
+                loading.classList.remove('show');
+                analyzeButton.disabled = false;
+            }
+        });
+
+        function showResult(isPure) {
+            const resultContent = document.getElementById('resultContent');
+
+            testPage.classList.remove('show');
+            resultPage.classList.add('show');
+
+            if (isPure) {
+                resultPage.className = 'result-page pure show';
+                resultContent.innerHTML = `
+                    <div class="result-icon-container">
+                        <div class="result-icon">✓</div>
+                    </div>
+                    <h1>Pure Honey!</h1>
+                    <p class="message">Congratulations! Your honey is pure and authentic.</p>
+                    <p class="details">All parameters are within the ideal range. Enjoy the natural goodness of pure honey for your health and wellness.</p>
+                    <div>
+                        <span class="sparkle-icon">✨</span>
+                        <span class="sparkle-icon">✨</span>
+                        <span class="sparkle-icon">✨</span>
+                    </div>
+                    <br><br>
+                    <button class="retry-button" id="retryButtonPure">🔄 Test Another Sample</button>
+                `;
+
+                document.getElementById('retryButtonPure').addEventListener('click', function() {
+                    resultPage.classList.remove('show');
+                    testPage.classList.add('show');
+                    document.getElementById('pH').value = '';
+                    document.getElementById('waterContent').value = '';
+                    document.getElementById('fructose').value = '';
+                    document.getElementById('glucose').value = '';
+                });
+
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = Math.random() * 100 + '%';
+                        confetti.style.backgroundColor = ['#FFD700', '#90EE90', '#87CEEB', '#FFA500'][Math.floor(Math.random() * 4)];
+                        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                        resultPage.appendChild(confetti);
+                        
+                        setTimeout(() => confetti.remove(), 3000);
+                    }, i * 50);
+                }
+            } else {
+                resultPage.className = 'result-page adulterated show';
+                resultContent.innerHTML = `
+                    <div class="result-icon-container">
+                        <div class="result-icon">😞</div>
+                    </div>
+                    <h1>Adulterated Honey</h1>
+                    <p class="message">Unfortunately, your honey shows signs of adulteration.</p>
+                    <p class="details">Some parameters are outside the normal range. Consider testing another sample or consulting with a honey quality expert.</p>
+                    <br><br>
+                    <button class="retry-button" id="retryButtonAdult">🔄 Test Another Sample</button>
+                `;
+
+                document.getElementById('retryButtonAdult').addEventListener('click', function() {
+                    resultPage.classList.remove('show');
+                    testPage.classList.add('show');
+                    document.getElementById('pH').value = '';
+                    document.getElementById('waterContent').value = '';
+                    document.getElementById('fructose').value = '';
+                    document.getElementById('glucose').value = '';
+                });
+            }
+        }
+    </script>
+</body>
+</html>
