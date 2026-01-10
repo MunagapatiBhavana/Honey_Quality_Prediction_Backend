@@ -1,10 +1,16 @@
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
+import os
 import joblib
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "honey_pipeline.pkl")
+
+pipeline = joblib.load(MODEL_PATH)
+
 
 app = Flask(__name__)
 
-pipeline = joblib.load("C:\\Users\\munag\\OneDrive\\Desktop\\Final_Website\\honey_pipeline.pkl")
 
 # Default mean values for non-user features
 DEFAULTS = {
@@ -51,4 +57,5 @@ def predict():
         return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
+
     app.run(debug=True)
