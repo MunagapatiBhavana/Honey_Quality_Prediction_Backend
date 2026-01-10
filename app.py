@@ -3,16 +3,19 @@ import pandas as pd
 import os
 import joblib
 
+app = Flask(__name__)
+
+# -----------------------------
+# Load Model
+# -----------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "honey_pipeline.pkl")
 
 pipeline = joblib.load(MODEL_PATH)
 
-
-app = Flask(__name__)
-
-
-# Default mean values for non-user features
+# -----------------------------
+# Default values
+# -----------------------------
 DEFAULTS = {
     "CS": 5.500259,
     "Density": 1.535523,
@@ -21,18 +24,18 @@ DEFAULTS = {
     "Viscosity": 5752.893888
 }
 
+# -----------------------------
+# Routes
+# -----------------------------
 @app.route("/")
 def home():
     return render_template("index.html")
-
-
 
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
         data = request.get_json()
-        
-        # Create input dataframe with all required features
+
         input_data = pd.DataFrame([{
             "CS": DEFAULTS["CS"],
             "Density": DEFAULTS["Density"],
@@ -45,17 +48,19 @@ def predict():
             "Viscosity": DEFAULTS["Viscosity"]
         }])
 
-        # Make prediction
         result = pipeline.predict(input_data)[0]
-        
+
         return jsonify({
             "prediction": int(result),
             "message": "Pure Honey" if result == 1 else "Adulterated Honey"
         })
-    
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+# -----------------------------
+# Run App (Render compatible)
+# -----------------------------
 if __name__ == "__main__":
-
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
